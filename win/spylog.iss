@@ -125,6 +125,14 @@ Name: "Multi"; Description: "Multi service installation"
 Name: "Single"; Description: "Single service installation"
 Name: "Custom"; Description: "Custom installation"; Flags: iscustom
 
+[UninstallDelete]
+Type: files; Name: "{app}\filter\logs\*"
+Type: files; Name: "{app}\jail\logs\*"
+Type: files; Name: "{app}\action\logs\*"
+Type: files; Name: "{app}\action\data\*"
+Type: files; Name: "{app}\spylog\logs\*"
+Type: files; Name: "{app}\spylog\data\*"
+
 [Code]
 
 #include "iss\services.iss"
