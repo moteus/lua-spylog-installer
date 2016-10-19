@@ -35,6 +35,9 @@ SolidCompression=yes
 PrivilegesRequired=admin
 
 [Files]
+; Backup current configs
+Source: "{app}\config\*"; DestDir: "{app}\backup\{code:InstDate}"; Flags: external skipifsourcedoesntexist recursesubdirs
+
 ; Common files
 Source: "deps\{#Arch}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
 Source: "deps\{#Arch}\{#LuaVer}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
@@ -126,6 +129,11 @@ Name: "Custom"; Description: "Custom installation"; Flags: iscustom
 
 #include "iss\services.iss"
 
+function InstDate(Param: String): String;
+begin
+  Result := GetDateTimeString('yyyy.mm.dd_hh.nn.ss', #0, #0);
+end;
+
 procedure WinMessageError(msg : string);
 var
   err : cardinal;
@@ -134,16 +142,38 @@ begin
   MsgBox(msg + ': ' + IntToStr(err) + #13 + SysErrorMessage(err), mbError, MB_OK);
 end;
 
+function SpyLogServiceName(name:string) : string;
+begin
+  if name = 'spylog' then Result := 'SpyLog';
+  if name = 'filter' then Result := 'SpyLog - Filter';
+  if name = 'jail'   then Result := 'SpyLog - Jail';
+  if name = 'action' then Result := 'SpyLog - Action';
+end;
+
+function SpyLogStopService(name : string) : boolean;
+var
+  i : integer;
+begin
+  if name <> 'spylog' then name := 'spylog_' + name;
+
+  i := 0;
+  while IsServiceRunning(name) do begin
+    inc(i);
+    StopService(name);
+    if i > 3 then break;
+    if IsServiceRunning(name) then Sleep(20000);
+  end;
+
+  Result := not IsServiceRunning(name);
+end;
+
 procedure SpyLogInstallService(name:string);
 var
   appPath, display, desc : String;
 begin
   appPath := ExpandConstant('{app}') + '\' + name + '\LuaService.exe';
 
-  if name = 'spylog' then display := 'SpyLog';
-  if name = 'filter' then display := 'SpyLog - Filter';
-  if name = 'jail'   then display := 'SpyLog - Jail';
-  if name = 'action' then display := 'SpyLog - Action';
+  display := SpyLogServiceName(name);
 
   if name = 'spylog' then desc := 'SpyLog service';
   if name = 'filter' then desc := 'SpyLog Filter service';
@@ -152,43 +182,57 @@ begin
 
   if name <> 'spylog' then name := 'spylog_' + name;
 
-  if false = IsServiceInstalled(name) then begin
-    if not InstallService( appPath, name, display, desc,
-      SERVICE_WIN32_OWN_PROCESS, SERVICE_AUTO_START) then
+  if not IsServiceInstalled(name) then begin
+    if not InstallService( appPath, name, display, desc, SERVICE_WIN32_OWN_PROCESS, SERVICE_AUTO_START) then
     begin
       WinMessageError('Can not install ' + display + ' service')
     end
-    else if not StartService(name) then begin
-      WinMessageError('Can not start ' + display + ' service');
-    end
-  end
+  end;
+
+  if not StartService(name) then begin
+    WinMessageError('Can not start ' + display + ' service');
+  end;
 end;
 
 procedure SpyLogUnInstallService(name:string);
 var
   i : integer;
-  display : String;
+  svc, display : String;
 begin
-  if name = 'spylog' then display := 'SpyLog';
-  if name = 'filter' then display := 'SpyLog - Filter';
-  if name = 'jail'   then display := 'SpyLog - Jail';
-  if name = 'action' then display := 'SpyLog - Action';
+  display := SpyLogServiceName(name);
 
-  if name <> 'spylog' then name := 'spylog_' + name;
+  if name <> 'spylog' then svc := 'spylog_' + name else svc := name;
   
-  if IsServiceInstalled(name) then begin
-    i := 0;
-    while IsServiceRunning(name) do begin
-      inc(i);
-      StopService(name);
-      if i > 3 then break;
-      if IsServiceRunning(name) then Sleep(20000);
-    end;
-    if IsServiceRunning(name) then
+  if IsServiceInstalled(svc) then begin
+    if not SpyLogStopService(name) then
       WinMessageError('Can not stop ' + display + ' service')
-    else if not RemoveService(name) then
+    else if not RemoveService(svc) then
       WinMessageError('Can not remove ' + display + ' service')
   end
+end;
+
+function InitializeSetup(): Boolean;
+begin
+  Result := true
+  if not SpyLogStopService('spylog') then begin
+    Result := false;
+    WinMessageError('Can not stop ' + SpyLogServiceName('spylog') + ' service')
+  end;
+
+  if not SpyLogStopService('filter') then begin
+    Result := false;
+    WinMessageError('Can not stop ' + SpyLogServiceName('filter') + ' service')
+  end;
+
+  if not SpyLogStopService('jail') then begin
+    Result := false;
+    WinMessageError('Can not stop ' + SpyLogServiceName('jail') + ' service')
+  end;
+  
+  if not SpyLogStopService('action') then begin
+    Result := false;
+    WinMessageError('Can not stop ' + SpyLogServiceName('action') + ' service')
+  end;
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
