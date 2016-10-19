@@ -1,0 +1,3 @@
+[submodule "spylog"]
+	path = spylog
+	url = https://github.com/moteus/lua-spylog
