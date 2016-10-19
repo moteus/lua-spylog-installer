@@ -22,7 +22,7 @@ DefaultGroupName={#Name}
 
 ; Каталог, куда будет записан собранный setup и имя исполняемого файла
 OutputDir=.
-OutputBaseFileName={#Name}-setup
+OutputBaseFileName={#Name}-{#Arch}
 
 ; Файл иконки
 SetupIconFile=
