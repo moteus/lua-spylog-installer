@@ -15,23 +15,18 @@ AppPublisherURL={#URL}
 AppSupportURL={#URL}
 AppUpdatesURL={#URL}
 
-; Путь установки по-умолчанию
 DefaultDirName={pf}\{#Name}
-; Имя группы в меню "Пуск"
 DefaultGroupName={#Name}
 
-; Каталог, куда будет записан собранный setup и имя исполняемого файла
 OutputDir=.
 OutputBaseFileName={#Name}-{#Arch}-{#Version}
 
-; Файл иконки
 SetupIconFile=
 
-; Параметры сжатия
 Compression=lzma
 SolidCompression=yes
 
-; Нужно для установки службы
+; We install Services
 PrivilegesRequired=admin
 
 [Files]
@@ -61,19 +56,19 @@ Source: "deps\{#Arch}\{#LuaVer}\bin\lua51.dll"; DestDir: "{app}\spylog"; Compone
 
 ; Filter configuration
 Source: "spylog\filter\init.lua"; DestDir: "{app}\filter"; Components: Multi\Filter
-Source: "spylog\filter\spylog-filter.bat"; DestDir: "{app}\filter"; Components: Multi\Filter
+Source: "spylog\filter\spylog-filter.bat"; DestDir: "{app}\filter"; Components: Multi\Filter; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
 
 ; Jail configuration
 Source: "spylog\jail\init.lua"; DestDir: "{app}\jail"; Components: Multi\Jail
-Source: "spylog\jail\spylog-jail.bat"; DestDir: "{app}\jail"; Components: Multi\Jail
+Source: "spylog\jail\spylog-jail.bat"; DestDir: "{app}\jail"; Components: Multi\Jail; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
 
 ; Action configuration
 Source: "spylog\action\init.lua"; DestDir: "{app}\action"; Components: Multi\Action
-Source: "spylog\action\spylog-action.bat"; DestDir: "{app}\action"; Components: Multi\Action
+Source: "spylog\action\spylog-action.bat"; DestDir: "{app}\action"; Components: Multi\Action; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
 
 ; SpyLog configuration
 Source: "spylog\spylog\init.lua"; DestDir: "{app}\spylog"; Components: SpyLog
-Source: "spylog\spylog\spylog.bat"; DestDir: "{app}\spylog"; Components: SpyLog
+Source: "spylog\spylog\spylog.bat"; DestDir: "{app}\spylog"; Components: SpyLog; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
 
 ; Common
 Source: "..\spylog\src\lib\*"; DestDir: "{app}\lib"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog; Flags: recursesubdirs
@@ -110,6 +105,7 @@ Name: "{app}\jail"
 Name: "{app}\action"
 Name: "{app}\spylog"
 Name: "{app}\config"
+Name: "{app}\backup"
 Name: "{app}\config\filters"
 Name: "{app}\config\jails"
 Name: "{app}\config\actions"
@@ -135,6 +131,7 @@ Type: files; Name: "{app}\spylog\data\*"
 
 [Code]
 
+#include "iss\FileReplaceString.iss"
 #include "iss\services.iss"
 
 [Code]

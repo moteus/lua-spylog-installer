@@ -2,9 +2,11 @@
 
 @echo off && setlocal
 
-SET PATH=..\bin;%PATH%
-SET LUA_INIT=
-SET LUA_CPATH=..\lib\?.dll
-SET LUA_PATH=..\lib\?.lua;..\lib\?\init.lua;.\lib\?.lua
+CD /D "$(APP)\action"
 
-start "SpyLog - Action" ..\bin\lua51.exe main.lua
+SET PATH=$(APP)\bin;%PATH%
+SET LUA_INIT=
+SET LUA_CPATH=!\..\lib\?.dll
+SET LUA_PATH=!\..\lib\?.lua;!\..\lib\?\init.lua;!\..\action\lib\?.lua
+
+start "SpyLog - Action" "$(APP)\bin\lua51.exe" main.lua
