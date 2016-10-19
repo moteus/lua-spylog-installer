@@ -31,23 +31,23 @@ const
 	SERVICE_WIN32_SHARE_PROCESS	= $20;
 	SERVICE_WIN32				= $30;
 	SERVICE_INTERACTIVE_PROCESS = $100;
-	SERVICE_BOOT_START          = $0;
-	SERVICE_SYSTEM_START        = $1;
-	SERVICE_AUTO_START          = $2;
-	SERVICE_DEMAND_START        = $3;
-	SERVICE_DISABLED            = $4;
-	SERVICE_DELETE              = $10000;
+	SERVICE_BOOT_START			= $0;
+	SERVICE_SYSTEM_START		= $1;
+	SERVICE_AUTO_START			= $2;
+	SERVICE_DEMAND_START		= $3;
+	SERVICE_DISABLED			= $4;
+	SERVICE_DELETE				= $10000;
 	SERVICE_CONTROL_STOP		= $1;
 	SERVICE_CONTROL_PAUSE		= $2;
 	SERVICE_CONTROL_CONTINUE	= $3;
 	SERVICE_CONTROL_INTERROGATE = $4;
 	SERVICE_STOPPED				= $1;
-	SERVICE_START_PENDING       = $2;
-	SERVICE_STOP_PENDING        = $3;
-	SERVICE_RUNNING             = $4;
-	SERVICE_CONTINUE_PENDING    = $5;
-	SERVICE_PAUSE_PENDING       = $6;
-	SERVICE_PAUSED              = $7;
+	SERVICE_START_PENDING		= $2;
+	SERVICE_STOP_PENDING		= $3;
+	SERVICE_RUNNING				= $4;
+	SERVICE_CONTINUE_PENDING	= $5;
+	SERVICE_PAUSE_PENDING		= $6;
+	SERVICE_PAUSED				= $7;
 
 // #######################################################################################
 // nt based service utilities
@@ -271,10 +271,10 @@ begin
 			exit;
 		end;
 
-		//if error = true then begin
-		//	MsgBox('the ' + service + ' port was already used. The old service is disabled now. You should check the services file manually now.',mbInformation,MB_OK);
-		//	InstExec('notepad.exe',filename,GetCurrentDir(),true,false,SW_SHOWNORMAL,errcode);
-		//end;
+		if error = true then begin
+			MsgBox('the ' + service + ' port was already used. The old service is disabled now. You should check the services file manually now.',mbInformation,MB_OK);
+			Exec('notepad.exe', filename, GetCurrentDir(), SW_SHOWNORMAL, ewWaitUntilTerminated, errcode);
+		end;
 	end
 	else
 		Result := false;

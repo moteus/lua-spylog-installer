@@ -22,7 +22,7 @@ DefaultGroupName={#Name}
 
 ; Каталог, куда будет записан собранный setup и имя исполняемого файла
 OutputDir=.
-OutputBaseFileName={#Name}-{#Arch}
+OutputBaseFileName={#Name}-{#Arch}-{#Version}
 
 ; Файл иконки
 SetupIconFile=
@@ -137,6 +137,8 @@ Type: files; Name: "{app}\spylog\data\*"
 
 #include "iss\services.iss"
 
+[Code]
+
 function InstDate(Param: String): String;
 begin
   Result := GetDateTimeString('yyyy.mm.dd_hh.nn.ss', #0, #0);
@@ -204,7 +206,6 @@ end;
 
 procedure SpyLogUnInstallService(name:string);
 var
-  i : integer;
   svc, display : String;
 begin
   display := SpyLogServiceName(name);
