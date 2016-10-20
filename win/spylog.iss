@@ -1,10 +1,20 @@
+#include "iss\SpyLogVer.iss"
+
 #define   Name       "SpyLog"
+
+#if SpyLogVer
+#define   Version    SpyLogVer
+#else
 #define   Version    "0.0.1"
+#endif
+
 #define   Publisher  "Alexey Melnichuk"
 #define   URL        "https://github.com/moteus/lua-spylog"
 #define   Arch       "x86"
 #define   LuaVer     "5.1"
 #define   LuaShortVer StringChange(LuaVer, ".", "")
+
+#pragma message Version
 
 [Setup]
 AppId="SpyLog"
