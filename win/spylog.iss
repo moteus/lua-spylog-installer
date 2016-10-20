@@ -14,8 +14,6 @@
 #define   LuaVer     "5.1"
 #define   LuaShortVer StringChange(LuaVer, ".", "")
 
-#pragma message Version
-
 [Setup]
 AppId="SpyLog"
 
