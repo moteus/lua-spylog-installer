@@ -40,19 +40,19 @@ Source: "deps\{#Arch}\{#LuaVer}\lib\*"; DestDir: "{app}\lib"; Components: Multi\
 
 ; Bin for Filter
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\filter"; Components: Multi\Filter
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua51.dll"; DestDir: "{app}\filter"; Components: Multi\Filter
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\filter"; Components: Multi\Filter
 
 ; Bin for Jail
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\jail"; Components: Multi\Jail
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua51.dll"; DestDir: "{app}\jail"; Components: Multi\Jail
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\jail"; Components: Multi\Jail
 
 ; Bin for Action
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\action"; Components: Multi\Action
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua51.dll"; DestDir: "{app}\action"; Components: Multi\Action
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\action"; Components: Multi\Action
 
 ; Bin for SpyLog
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\spylog"; Components: SpyLog
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua51.dll"; DestDir: "{app}\spylog"; Components: SpyLog
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\spylog"; Components: SpyLog
 
 ; Filter configuration
 Source: "spylog\filter\init.lua"; DestDir: "{app}\filter"; Components: Multi\Filter
@@ -244,8 +244,16 @@ end;
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssPostInstall then begin
-    if IsComponentSelected('SpyLog') then SpyLogInstallService('spylog')
-    else begin
+    if IsComponentSelected('SpyLog') then begin
+      SpyLogUnInstallService('filter');
+      SpyLogUnInstallService('jail');
+      SpyLogUnInstallService('action');
+
+      SpyLogInstallService('spylog')
+    end
+    else if IsComponentSelected('Multi') then begin
+      SpyLogUnInstallService('spylog');
+
       if IsComponentSelected('Multi\Filter') then SpyLogInstallService('filter');
       if IsComponentSelected('Multi\Jail')   then SpyLogInstallService('jail');
       if IsComponentSelected('Multi\Action') then SpyLogInstallService('action');
