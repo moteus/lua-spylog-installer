@@ -40,6 +40,10 @@ SolidCompression=yes
 ; We install Services
 PrivilegesRequired=admin
 
+#if Arch=="x64"
+ArchitecturesInstallIn64BitMode={#Arch}
+#endif
+
 [Files]
 ; Backup current configs
 Source: "{app}\config\*"; DestDir: "{app}\backup\{code:InstDate}"; Flags: external skipifsourcedoesntexist recursesubdirs
