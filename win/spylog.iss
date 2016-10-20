@@ -4,6 +4,7 @@
 #define   URL        "https://github.com/moteus/lua-spylog"
 #define   Arch       "x86"
 #define   LuaVer     "5.1"
+#define   LuaShortVer StringChange(LuaVer, ".", "")
 
 [Setup]
 AppId="SpyLog"
@@ -44,31 +45,31 @@ Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\filter"; Componen
 
 ; Bin for Jail
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\jail"; Components: Multi\Jail
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\jail"; Components: Multi\Jail
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\jail"; Components: Multi\Jail
 
 ; Bin for Action
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\action"; Components: Multi\Action
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\action"; Components: Multi\Action
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\action"; Components: Multi\Action
 
 ; Bin for SpyLog
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\spylog"; Components: SpyLog
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\spylog"; Components: SpyLog
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\spylog"; Components: SpyLog
 
 ; Filter configuration
 Source: "spylog\filter\init.lua"; DestDir: "{app}\filter"; Components: Multi\Filter
-Source: "spylog\filter\spylog-filter.bat"; DestDir: "{app}\filter"; Components: Multi\Filter; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
+Source: "spylog\filter\spylog-filter.bat"; DestDir: "{app}\filter"; Components: Multi\Filter; AfterInstall: ProcessStartBat
 
 ; Jail configuration
 Source: "spylog\jail\init.lua"; DestDir: "{app}\jail"; Components: Multi\Jail
-Source: "spylog\jail\spylog-jail.bat"; DestDir: "{app}\jail"; Components: Multi\Jail; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
+Source: "spylog\jail\spylog-jail.bat"; DestDir: "{app}\jail"; Components: Multi\Jail; AfterInstall: ProcessStartBat
 
 ; Action configuration
 Source: "spylog\action\init.lua"; DestDir: "{app}\action"; Components: Multi\Action
-Source: "spylog\action\spylog-action.bat"; DestDir: "{app}\action"; Components: Multi\Action; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
+Source: "spylog\action\spylog-action.bat"; DestDir: "{app}\action"; Components: Multi\Action; AfterInstall: ProcessStartBat
 
 ; SpyLog configuration
 Source: "spylog\spylog\init.lua"; DestDir: "{app}\spylog"; Components: SpyLog
-Source: "spylog\spylog\spylog.bat"; DestDir: "{app}\spylog"; Components: SpyLog; AfterInstall: ReplaceStringInCurFile('$(APP)', '{app}')
+Source: "spylog\spylog\spylog.bat"; DestDir: "{app}\spylog"; Components: SpyLog; AfterInstall: ProcessStartBat
 
 ; Common
 Source: "..\spylog\src\lib\*"; DestDir: "{app}\lib"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog; Flags: recursesubdirs
@@ -139,6 +140,12 @@ Type: files; Name: "{app}\spylog\data\*"
 function InstDate(Param: String): String;
 begin
   Result := GetDateTimeString('yyyy.mm.dd_hh.nn.ss', #0, #0);
+end;
+
+procedure ProcessStartBat();
+begin
+  ReplaceStringInCurFile('$(APP)', '{app}');
+  ReplaceStringInCurFile('lua51.exe', 'lua{#LuaShortVer}.exe');
 end;
 
 procedure WinMessageError(msg : string);
