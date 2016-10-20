@@ -15,7 +15,7 @@
 #define   LuaShortVer StringChange(LuaVer, ".", "")
 
 [Setup]
-AppId="SpyLog"
+AppId={#Name}
 
 AppName={#Name}
 AppVersion={#Version}
@@ -39,6 +39,7 @@ SolidCompression=yes
 PrivilegesRequired=admin
 
 #if Arch=="x64"
+ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode={#Arch}
 #endif
 
