@@ -11,15 +11,8 @@
 #endif
 
 #ifndef Version
-
 #include "iss\SpyLogVer.iss"
-
-#if SpyLogVer
-#define   Version    SpyLogVer
-#else
-#define   Version    "0.0.1"
-#endif
-
+#define  Version    SpyLogVer
 #endif
 
 #define   Name       "SpyLog"
