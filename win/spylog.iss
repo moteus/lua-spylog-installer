@@ -23,6 +23,8 @@
 [Setup]
 AppId={#Name}
 
+LicenseFile={#SpyLogGit}\LICENSE
+
 AppName={#Name}
 AppVersion={#Version}
 AppPublisher={#Publisher}
