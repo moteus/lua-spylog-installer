@@ -10,15 +10,15 @@
 #define LuaVer     "5.1"
 #endif
 
-#ifndef Version
 #include "iss\SpyLogVer.iss"
-#define  Version    SpyLogVer
-#endif
 
-#define   Name       "SpyLog"
-#define   Publisher  "Alexey Melnichuk"
-#define   URL        "https://github.com/moteus/lua-spylog"
+#define   Version     SpyLogVer
+#define   Name        SpyLogName
+#define   URL         SpyLogUrl
+#define   Copyright   SpyLogCr
 #define   LuaShortVer StringChange(LuaVer, ".", "")
+
+#define   Publisher   "Alexey Melnichuk"
 
 [Setup]
 AppId={#Name}
@@ -27,7 +27,8 @@ AppName={#Name}
 AppVersion={#Version}
 AppPublisher={#Publisher}
 AppPublisherURL={#URL}
-AppSupportURL={#URL}/issues
+AppCopyright={#Copyright}
+AppSupportURL={#URL}
 AppUpdatesURL={#URL}
 
 DefaultDirName={pf}\{#Name}
