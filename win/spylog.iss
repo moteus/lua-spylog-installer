@@ -1,6 +1,18 @@
-#include "iss\SpyLogVer.iss"
+#ifndef SpyLogGit
+#define SpyLogGit ".."
+#endif
 
-#define   Name       "SpyLog"
+#ifndef Arch
+#define Arch       "x86"
+#endif
+
+#ifndef LuaVer
+#define LuaVer     "5.1"
+#endif
+
+#ifndef Version
+
+#include "iss\SpyLogVer.iss"
 
 #if SpyLogVer
 #define   Version    SpyLogVer
@@ -8,10 +20,11 @@
 #define   Version    "0.0.1"
 #endif
 
+#endif
+
+#define   Name       "SpyLog"
 #define   Publisher  "Alexey Melnichuk"
 #define   URL        "https://github.com/moteus/lua-spylog"
-#define   Arch       "x86"
-#define   LuaVer     "5.1"
 #define   LuaShortVer StringChange(LuaVer, ".", "")
 
 [Setup]
@@ -21,7 +34,7 @@ AppName={#Name}
 AppVersion={#Version}
 AppPublisher={#Publisher}
 AppPublisherURL={#URL}
-AppSupportURL={#URL}
+AppSupportURL={#URL}/issues
 AppUpdatesURL={#URL}
 
 DefaultDirName={pf}\{#Name}
@@ -85,24 +98,24 @@ Source: "spylog\spylog\init.lua"; DestDir: "{app}\spylog"; Components: SpyLog
 Source: "spylog\spylog\spylog.bat"; DestDir: "{app}\spylog"; Components: SpyLog; AfterInstall: ProcessStartBat
 
 ; Common
-Source: "..\spylog\src\lib\*"; DestDir: "{app}\lib"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog; Flags: recursesubdirs
-Source: "..\spylog\src\config\spylog.lua"; DestDir: "{app}\config"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
+Source: "{#SpyLogGit}\spylog\src\lib\*"; DestDir: "{app}\lib"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog; Flags: recursesubdirs
+Source: "{#SpyLogGit}\spylog\src\config\spylog.lua"; DestDir: "{app}\config"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
 
 ; Filter
-Source: "..\spylog\src\filter\*"; DestDir: "{app}\filter"; Components: Multi\Filter SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
-Source: "..\spylog\src\config\sources\*"; DestDir: "{app}\config\sources"; Components: Multi\Filter SpyLog
-Source: "..\spylog\src\config\filters\*"; DestDir: "{app}\config\filters"; Components: Multi\Filter SpyLog
+Source: "{#SpyLogGit}\spylog\src\filter\*"; DestDir: "{app}\filter"; Components: Multi\Filter SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
+Source: "{#SpyLogGit}\spylog\src\config\sources\*"; DestDir: "{app}\config\sources"; Components: Multi\Filter SpyLog
+Source: "{#SpyLogGit}\spylog\src\config\filters\*"; DestDir: "{app}\config\filters"; Components: Multi\Filter SpyLog
  
 ; Jail
-Source: "..\spylog\src\jail\*"; DestDir: "{app}\jail"; Components: Multi\Jail SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
-Source: "..\spylog\src\config\jails\*"; DestDir: "{app}\config\jails"; Components: Multi\Jail SpyLog
+Source: "{#SpyLogGit}\spylog\src\jail\*"; DestDir: "{app}\jail"; Components: Multi\Jail SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
+Source: "{#SpyLogGit}\spylog\src\config\jails\*"; DestDir: "{app}\config\jails"; Components: Multi\Jail SpyLog
 
 ; Action
-Source: "..\spylog\src\action\*"; DestDir: "{app}\action"; Components: Multi\Action SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
-Source: "..\spylog\src\config\actions\*"; DestDir: "{app}\config\actions"; Components: Multi\Action SpyLog
+Source: "{#SpyLogGit}\spylog\src\action\*"; DestDir: "{app}\action"; Components: Multi\Action SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
+Source: "{#SpyLogGit}\spylog\src\config\actions\*"; DestDir: "{app}\config\actions"; Components: Multi\Action SpyLog
 
 ; SpyLog
-Source: "..\spylog\src\spylog\*"; DestDir: "{app}\spylog"; Components: SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
+Source: "{#SpyLogGit}\spylog\src\spylog\*"; DestDir: "{app}\spylog"; Components: SpyLog; Excludes: "init.lua"; Flags: recursesubdirs
 
 [Components]
 Name: "Multi"; Description: "Install SpyLog as several services"; Flags: exclusive

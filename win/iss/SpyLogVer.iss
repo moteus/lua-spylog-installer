@@ -10,7 +10,7 @@
     #define public SpyLogVer = Copy(FileLine, Pos('''', FileLine) + 1, RPos('''', FileLine) - Pos('''', FileLine) - 1 )
   #endif
 #endsub
-#for {FileHandle = FileOpen("..\spylog\src\lib\spylog\version.lua"); FileHandle && !FileEof(FileHandle); ""} \
+#for {FileHandle = FileOpen("{#SpyLogGit}\spylog\src\lib\spylog\version.lua"); FileHandle && !FileEof(FileHandle); ""} \
   ProcessFileLine
 #if FileHandle
   #expr FileClose(FileHandle)
