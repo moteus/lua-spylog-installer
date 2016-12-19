@@ -60,6 +60,7 @@ Source: "{app}\config\*"; DestDir: "{app}\backup\{code:InstDate}"; Flags: extern
 Source: "deps\{#Arch}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
 Source: "deps\{#Arch}\{#LuaVer}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
 Source: "deps\{#Arch}\{#LuaVer}\lib\*"; DestDir: "{app}\lib"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog; Flags: recursesubdirs
+Source: "{#SpyLogGit}\misc\ipsecspylog.bat"; DestDir: "{app}\bin"; Components: Multi\Action SpyLog
 
 ; Bin for Filter
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\filter"; Components: Multi\Filter
