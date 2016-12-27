@@ -54,7 +54,7 @@ ArchitecturesInstallIn64BitMode={#Arch}
 
 [Files]
 ; Backup current configs
-Source: "{app}\config\*"; DestDir: "{app}\backup\{code:InstDate}"; Flags: external skipifsourcedoesntexist recursesubdirs
+Source: "{app}\config\*"; DestDir: "{app}\backup\{code:InstDate}\config"; Flags: external skipifsourcedoesntexist recursesubdirs
 
 ; Common files
 Source: "deps\{#Arch}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
@@ -133,6 +133,7 @@ Name: "{app}\backup"
 Name: "{app}\config\filters"
 Name: "{app}\config\jails"
 Name: "{app}\config\actions"
+Name: "{app}\config\data"
 Name: "{app}\filter\logs"
 Name: "{app}\jail\logs"
 Name: "{app}\action\logs"
