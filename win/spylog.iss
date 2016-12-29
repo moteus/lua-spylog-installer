@@ -58,7 +58,15 @@ Source: "{app}\config\*"; DestDir: "{app}\backup\{code:InstDate}\config"; Flags:
 
 ; Common files
 Source: "deps\{#Arch}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
+
+#if LuaVer == "5.1"
+Source: "deps\{#Arch}\{#LuaVer}\bin\*";     DestDir: "{app}\bin"; Tasks: Lua/51;  Components: Multi\Filter Multi\Jail Multi\Action SpyLog
+Source: "deps\{#Arch}\{#LuaVer}\bin\j20\*"; DestDir: "{app}\bin"; Tasks: Lua/j20; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
+Source: "deps\{#Arch}\{#LuaVer}\bin\j21\*"; DestDir: "{app}\bin"; Tasks: Lua/j21; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
+#else
 Source: "deps\{#Arch}\{#LuaVer}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
+#endif
+
 Source: "deps\{#Arch}\{#LuaVer}\lib\*"; DestDir: "{app}\lib"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog; Flags: recursesubdirs
 Source: "{#SpyLogGit}\misc\ipsecspylog.bat"; DestDir: "{app}\bin"; Components: Multi\Action SpyLog
 
@@ -120,6 +128,14 @@ Name: "Multi\Filter"; Description: "SpyLog Filter service"; Types: Multi
 Name: "Multi\Jail"; Description: "SpyLog Jail service"; Types: Multi
 Name: "Multi\Action"; Description: "SpyLog Action service"; Types: Multi
 Name: "SpyLog"; Description: "Install SpyLog as Single service"; Types: Single; Flags: exclusive
+
+#if LuaVer == "5.1"
+[Tasks]
+Name: "Lua";     Description: "Lua version"
+Name: "Lua\51";  Description: "Lua 5.1";    Flags: exclusive 
+Name: "Lua\j20"; Description: "LuaJIT 2.0"; Flags: exclusive unchecked
+Name: "Lua\j21"; Description: "LuaJIT 2.1"; Flags: exclusive unchecked
+#endif
 
 [Dirs]
 Name: "{app}\bin"
