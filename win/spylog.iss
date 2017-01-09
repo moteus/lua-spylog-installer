@@ -56,6 +56,9 @@ ArchitecturesInstallIn64BitMode={#Arch}
 ; Backup current configs
 Source: "{app}\config\*"; DestDir: "{app}\backup\{code:InstDate}\config"; Flags: external skipifsourcedoesntexist recursesubdirs
 
+; License file
+Source: {#SpyLogGit}\LICENSE; DestDir: "{app}"
+
 ; Common files
 Source: "deps\{#Arch}\bin\*"; DestDir: "{app}\bin"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog
 
