@@ -73,21 +73,38 @@ Source: "deps\{#Arch}\{#LuaVer}\bin\*"; DestDir: "{app}\bin"; Components: Multi\
 Source: "deps\{#Arch}\{#LuaVer}\lib\*"; DestDir: "{app}\lib"; Components: Multi\Filter Multi\Jail Multi\Action SpyLog; Flags: recursesubdirs
 Source: "{#SpyLogGit}\misc\ipsecspylog.bat"; DestDir: "{app}\bin"; Components: Multi\Action SpyLog
 
-; Bin for Filter
+; LuaService
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\filter"; Components: Multi\Filter
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua*.dll"; DestDir: "{app}\filter"; Components: Multi\Filter
-
-; Bin for Jail
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\jail"; Components: Multi\Jail
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\jail"; Components: Multi\Jail
-
-; Bin for Action
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\action"; Components: Multi\Action
-Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\action"; Components: Multi\Action
-
-; Bin for SpyLog
 Source: "deps\{#Arch}\{#LuaVer}\bin\LuaService.exe"; DestDir: "{app}\spylog"; Components: SpyLog
+
+; Lua Binaries
+#if LuaVer == "5.1"
+
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\filter"; Tasks: Lua/51; Components: Multi\Filter
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\jail";   Tasks: Lua/51; Components: Multi\Jail
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\action"; Tasks: Lua/51; Components: Multi\Action
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\spylog"; Tasks: Lua/51; Components: SpyLog
+
+Source: "deps\{#Arch}\{#LuaVer}\bin\j20\lua{#LuaShortVer}.dll"; DestDir: "{app}\filter"; Tasks: Lua/j20; Components: Multi\Filter
+Source: "deps\{#Arch}\{#LuaVer}\bin\j20\lua{#LuaShortVer}.dll"; DestDir: "{app}\jail";   Tasks: Lua/j20; Components: Multi\Jail
+Source: "deps\{#Arch}\{#LuaVer}\bin\j20\lua{#LuaShortVer}.dll"; DestDir: "{app}\action"; Tasks: Lua/j20; Components: Multi\Action
+Source: "deps\{#Arch}\{#LuaVer}\bin\j20\lua{#LuaShortVer}.dll"; DestDir: "{app}\spylog"; Tasks: Lua/j20; Components: SpyLog
+
+Source: "deps\{#Arch}\{#LuaVer}\bin\j21\lua{#LuaShortVer}.dll"; DestDir: "{app}\filter"; Tasks: Lua/j21; Components: Multi\Filter
+Source: "deps\{#Arch}\{#LuaVer}\bin\j21\lua{#LuaShortVer}.dll"; DestDir: "{app}\jail";   Tasks: Lua/j21; Components: Multi\Jail
+Source: "deps\{#Arch}\{#LuaVer}\bin\j21\lua{#LuaShortVer}.dll"; DestDir: "{app}\action"; Tasks: Lua/j21; Components: Multi\Action
+Source: "deps\{#Arch}\{#LuaVer}\bin\j21\lua{#LuaShortVer}.dll"; DestDir: "{app}\spylog"; Tasks: Lua/j21; Components: SpyLog
+
+#else
+
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\filter"; Components: Multi\Filter
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\jail";   Components: Multi\Jail
+Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\action"; Components: Multi\Action
 Source: "deps\{#Arch}\{#LuaVer}\bin\lua{#LuaShortVer}.dll"; DestDir: "{app}\spylog"; Components: SpyLog
+
+#endif
 
 ; Filter configuration
 Source: "spylog\filter\init.lua"; DestDir: "{app}\filter"; Components: Multi\Filter
