@@ -14,6 +14,14 @@ end
 -------------------------------------------------------------------------------
 utils.dial_string = {} do
 
+local function qute_value(v)
+  v = tostring(v)
+  if string.find(v, ' ') then
+    v = "'" .. v .. "'"
+  end
+  return v
+end
+
 local BaseLeg = ut.class() do
 
 function BaseLeg:__init()
@@ -56,7 +64,7 @@ function BaseLeg:build(mask)
   local options = ''
   for k,v in pairs(t) do if type(k) == 'string' then
     if options ~= '' then options = options .. ',' end
-    options = options .. k .. '=' .. tostring(v)
+    options = options .. k .. '=' .. qute_value(v)
   end end
   if options == '' then return '' end
   return (string.format(mask, options))
@@ -215,7 +223,7 @@ local function CreateDialString(t)
   local dialString = DialString.new()
   if t.SEP then dialString:set_separator(t.SEP)
   elseif t.sequence ~= nil then
-    dialString:set_separator(t.sequence and ',' or '|')
+    dialString:set_separator(t.sequence and '|' or ',')
   end
   local i = 1
   while(t[i])do
@@ -267,11 +275,47 @@ function utils.decodeURI(str)
 end
 
 function utils.encodeURI(str)
-  return (string.gsub(str, '[^A-Za-z0-9.%-\\/_: ]', char_to_hex))
+  return (string.gsub(str, '[^A-Za-z0-9.%-\\/_:@%[%]{}| ]', char_to_hex))
 end
 
 function utils.uuid()
   return uuid.new()
 end
+
+function utils.dummy() end
+
+function utils.call_q(q, ...)
+  while true do
+    local cb = q:pop()
+    if not cb then break end
+    cb(...)
+  end
+end
+
+function utils.is_callable(f)
+  return (type(f) == 'function') and f
+end
+
+function utils.super(self, m, ...)
+  if self.__base and self.__base[m] then
+    return self.__base[m](self, ...)
+  end
+  return self
+end
+
+function utils.is_in(v, t)
+  for i = 1, #t do
+    if t[i] == v then return i end
+  end
+end
+
+function utils.append_uniq(t, v)
+  for i = 1, #t do
+    if t[i] == v then return t end
+  end
+  t[#t + 1] = v
+  return t
+end
+
 
 return utils
